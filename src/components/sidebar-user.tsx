@@ -17,7 +17,7 @@ interface SidebarUserProps {
 export default function SidebarUser({ user }: SidebarUserProps) {
     return (
         <div className="w-full flex items-center gap-x-2 p-2 border border-neutral-800 rounded-2xl">
-            <Image src={user.image || ''} alt={user.name} width={32} height={32} className='rounded-full' />
+            <Image src={user.image || 'https://placehold.co/400'} alt={user.name} width={32} height={32} className='rounded-full' />
             <div className={`flex w-full items-center gap-x-2 ${user.isOpen ? 'flex justify-between' : 'hidden'} `}>
                 <div className='flex gap-x-2'>
                     <span className="text-sm">{user.name.split(' ')[0]}</span>

@@ -21,6 +21,7 @@ import { CartIcon } from './ui/cart'
 import { ChevronRightIcon } from './ui/chevron-right'
 import { ChevronLeftIcon } from './ui/chevron-left'
 import { FlaskIcon } from './ui/flask'
+import { usePathname } from 'next/navigation'
 
 export default function NewSidebar() {
 
@@ -67,7 +68,8 @@ export default function NewSidebar() {
 
     ]
 
-    const [isOpen, setIsOpen] = useState(true)
+    const [isOpen, setIsOpen] = useState(false)
+    const path = usePathname()
 
     return (
         // sidebar
@@ -102,28 +104,21 @@ export default function NewSidebar() {
                 </div>
 
                 {/* menu */}
-                <div className='mt-8'
-                    style={{
-                        display: isOpen ? 'flex' : 'none',
-                        flexDirection: 'column',
-                        alignItems: isOpen ? 'flex-start' : 'center'
-                    }}
-                >
+                <div className={`mt-8 flex flex-col gap-y-1 w-full`}>
                     <Separator />
-                    <SidebarItem title='Dashboard' icon={GaugeIcon} isOpen={isOpen} />
+                    <SidebarItem title='Dashboard' icon={GaugeIcon} isOpen={isOpen} path={path} url={'/dashboard'} />
                     <Separator />
                     {/* <SidebarTitle category={'main'} /> */}
                     {dataMock.map((item, index) => (
-                        <SidebarItem key={index} title={item.title} icon={item.icon} url={item.url} isOpen={isOpen} />
+                        <SidebarItem key={index} title={item.title} icon={item.icon} url={item.url} path={path} isOpen={isOpen} />
                     ))}
                     <Separator />
                     {/* <SidebarTitle category={'main'} /> */}
                     {mainAppMock.map((item, index) => (
-                        <SidebarItem key={index} title={item.title} icon={item.icon} isOpen={isOpen} />
+                        <SidebarItem key={index} title={item.title} icon={item.icon} path={path} isOpen={isOpen} />
                     ))}
-
-                    {/* <SidebarTitle category={'Resources'} /> */}
                 </div>
+
             </div>
             <div className='w-full flex flex-col items-center gap-y-4'>
                 <Buy isOpen={isOpen} />

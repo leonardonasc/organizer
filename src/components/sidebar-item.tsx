@@ -7,17 +7,18 @@ interface SidebarItemProps {
     icon?: React.ElementType
     url?: string
     isOpen: boolean
+    path: string
 }
 
-export default function SidebarItem({ title, icon: Icon, url, isOpen }: SidebarItemProps) {
+export default function SidebarItem({ title, icon: Icon, url, isOpen, path }: SidebarItemProps) {
     return (
-        <Button variant={'ghost'} className="w-full text-md flex items-center justify-start"
+        <Button variant={path === url ? 'outline' : 'ghost'} className={`w-full text-md flex items-center ${isOpen ? 'justify-start' : 'justify-center'}`}
             onClick={() => {
                 url && redirect(url)
             }}
         >
-            <div className="flex items-center gap-x-3 p-2 cursor-pointer rounded-lg">
-                {Icon && <Icon className={`${isOpen ? 'hover:text-purple-300' : ''}`} size={20} />}
+            <div className={`flex w-full items-center ${isOpen ? 'gap-x-3 p-2' : ''} cursor-pointer rounded-lg`} >
+                {Icon && <Icon className={'hover:text-purple-300'} size={20} />}
                 {isOpen && <span className="text-sm text-neutral-200">{title}</span>}
             </div>
         </Button>
