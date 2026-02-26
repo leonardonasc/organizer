@@ -17,9 +17,9 @@ export default function SidebarItem({ title, icon: Icon, url, isOpen, path }: Si
                 url && redirect(url)
             }}
         >
-            <div className={`flex w-full items-center ${isOpen ? 'gap-x-3 p-2' : ''} cursor-pointer rounded-lg`} >
-                {Icon && <Icon className={'hover:text-purple-300'} size={20} />}
-                {isOpen && <span className="text-sm text-neutral-200">{title}</span>}
+            <div className={`flex w-full items-center ${isOpen ? 'gap-x-3 p-2' : ''} ${path === url ? 'text-neutral-200' : 'text-neutral-400'} cursor-pointer rounded-lg`} >
+                {Icon && <Icon size={20} />}
+                {isOpen && <span className="text-sm">{title}</span>}
             </div>
         </Button>
     )

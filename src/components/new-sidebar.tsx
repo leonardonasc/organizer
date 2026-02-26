@@ -2,11 +2,7 @@
 
 import { useState } from 'react'
 import SidebarItem from './sidebar-item'
-import { MenuIcon } from './ui/menu'
 import { GaugeIcon } from './ui/gauge'
-import { PanelLeftOpenIcon } from './ui/panel-left-open'
-import { PanelRightOpenIcon } from './ui/panel-right-open'
-import SidebarTitle from './ui/sidebar-title'
 import SidebarUser from './sidebar-user'
 import { useSession } from 'next-auth/react'
 import { CogIcon } from './ui/cog'
@@ -18,36 +14,39 @@ import { HeartIcon } from './ui/heart'
 import { FileTextIcon } from './ui/file-text'
 import { AirplaneIcon } from './ui/airplane'
 import { CartIcon } from './ui/cart'
-import { ChevronRightIcon } from './ui/chevron-right'
-import { ChevronLeftIcon } from './ui/chevron-left'
 import { FlaskIcon } from './ui/flask'
 import { usePathname } from 'next/navigation'
+import { Button } from './ui/button'
+import { ChevronLeft } from 'lucide-react'
 
 export default function NewSidebar() {
 
     const { data: session } = useSession();
 
-
-    const mainAppMock = [
+    const secondaryNav = [
         {
             title: 'Wishlist',
-            icon: HeartIcon
+            icon: HeartIcon,
+            url: '/wishlists'
         },
         {
             title: 'Travels',
-            icon: AirplaneIcon
+            icon: AirplaneIcon,
+            url: '/travels'
         },
         {
             title: 'Annotations',
-            icon: FileTextIcon
+            icon: FileTextIcon,
+            url: '/annotations'
         },
         {
             title: 'Expenses',
-            icon: CircleDollarSignIcon
+            icon: CircleDollarSignIcon,
+            url: '/expenses'
         },
     ]
 
-    const dataMock = [
+    const mainNav = [
         {
             title: 'Profile',
             icon: UserIcon
@@ -68,25 +67,17 @@ export default function NewSidebar() {
 
     ]
 
-    const [isOpen, setIsOpen] = useState(false)
+    const [isOpen, setIsOpen] = useState(true)
     const path = usePathname()
 
     return (
         // sidebar
-        <div className='bg-neutral-950 h-screen p-6 border-neutral-800'
-            style={{
-                width: isOpen ? '15%' : '5%',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                alignItems: isOpen ? 'flex-start' : 'center',
-                transition: 'width 0.3s'
-            }}
-        >
+        <div className={`bg-neutral-950 border-neutral-800 h-screen p-6 
+            flex flex-col justify-between ${isOpen ? 'w-[16%]' : 'w-[5%]'} ${isOpen ? 'items-start' : 'items-center'} transition-width duration-300`}>
             {/* content */}
-            <div className="w-full">
+            <div className="w-full" >
                 {/* header */}
-                <div className='items-center flex'
+                < div className='items-center flex'
                     style={{
                         justifyContent: isOpen ? 'space-between' : 'center',
                     }}
@@ -96,12 +87,18 @@ export default function NewSidebar() {
                             display: isOpen ? 'flex' : 'none',
                         }}
                     >Organizer</h1>
-                    {isOpen ? (
-                        <ChevronLeftIcon className='size-6 cursor-pointer text-neutral-400' size={20} onClick={() => setIsOpen(false)} />
-                    ) : (
-                        <ChevronRightIcon className='size-6 cursor-pointer text-neutral-400' size={20} onClick={() => setIsOpen(true)} />
-                    )}
-                </div>
+                    {
+                        isOpen ? (
+                            <Button variant='ghost' className='border border-neutral-800' size='icon' onClick={() => setIsOpen(false)}>
+                                <ChevronLeft className='size-5 cursor-pointer text-neutral-400' size={20} />
+                            </Button>
+                        ) : (
+                            <Button variant='ghost' className='border border-neutral-800' size='icon' onClick={() => setIsOpen(true)}>
+                                <ChevronLeft className='size-5 cursor-pointer text-neutral-400 rotate-180' size={20} />
+                            </Button>
+                        )
+                    }
+                </div >
 
                 {/* menu */}
                 <div className={`mt-8 flex flex-col gap-y-1 w-full`}>
@@ -109,19 +106,25 @@ export default function NewSidebar() {
                     <SidebarItem title='Dashboard' icon={GaugeIcon} isOpen={isOpen} path={path} url={'/dashboard'} />
                     <Separator />
                     {/* <SidebarTitle category={'main'} /> */}
-                    {dataMock.map((item, index) => (
-                        <SidebarItem key={index} title={item.title} icon={item.icon} url={item.url} path={path} isOpen={isOpen} />
-                    ))}
+                    {
+                        secondaryNav.map((item, index) => (
+                            <SidebarItem key={index} title={item.title} icon={item.icon} path={path} isOpen={isOpen} url={item.url} />
+                        ))
+                    }
                     <Separator />
                     {/* <SidebarTitle category={'main'} /> */}
-                    {mainAppMock.map((item, index) => (
-                        <SidebarItem key={index} title={item.title} icon={item.icon} path={path} isOpen={isOpen} />
-                    ))}
-                </div>
+                    {
+                        mainNav.map((item, index) => (
+                            <SidebarItem key={index} title={item.title} icon={item.icon} path={path} isOpen={isOpen} url={item.url} />
+                        ))
+                    }
+                </div >
 
-            </div>
+            </div >
             <div className='w-full flex flex-col items-center gap-y-4'>
+
                 <Buy isOpen={isOpen} />
+
                 <SidebarUser user={{
                     name: session?.user?.name || '',
                     email: session?.user?.email || '',
@@ -130,6 +133,6 @@ export default function NewSidebar() {
                     tier: 'Free'
                 }} />
             </div>
-        </div>
+        </div >
     )
 }

@@ -14,20 +14,20 @@ export default function DashboardPage() {
     }
 
     return (
-        <div className="flex flex-col w-full p-6 bg-neutral-900 h-full rounded-lg">
-            <div className="flex justify-between text-xs text-neutral-500 font-semibold mb-5">
+        <div className="flex flex-col">
+            <div className="flex justify-between text-xs text-neutral-500 font-semibold">
                 <span className="flex items-center gap-x-2"><GaugeIcon size={15} /> Dashboard</span>
                 <span>Last updated: 3 hours ago</span>
             </div>
 
-            <div>
+            <div className="my-6">
                 <h1 className="text-2xl text-neutral-200">Welcome, {session?.user?.name}!</h1>
             </div>
 
             <div className="flex gap-x-3">
-                <Card className="flex-1 mt-4 bg-neutral-900 h-60"></Card>
-                <Card className="flex-1 mt-4 bg-neutral-900"></Card>
-                <Card className="flex-1 mt-4 bg-neutral-900"></Card>
+                <Card className="flex-1 bg-neutral-900 h-60"></Card>
+                <Card className="flex-1 bg-neutral-900"></Card>
+                <Card className="flex-1 bg-neutral-900"></Card>
             </div>
         </div>
     )

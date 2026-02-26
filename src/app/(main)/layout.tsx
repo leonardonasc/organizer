@@ -29,7 +29,9 @@ export default function RootLayout({
         >
             <NewSidebar />
             <div className="flex-1 p-3 bg-neutral-950">
-                {children}
+                <div className="w-full h-full bg-neutral-900 p-6 rounded-lg">
+                    {children}
+                </div>
             </div>
         </div>
     );
