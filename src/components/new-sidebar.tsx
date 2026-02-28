@@ -86,7 +86,7 @@ export default function NewSidebar() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 1, delay: 0.2 }}
-                className={`flex justify-between 2xl:${isOpen ? 'justify-between' : 'justify-center'} w-full`}>
+                className={`flex justify-between ${isOpen ? '2xl:justify-between' : '2xl:justify-center'} items-center w-full`}>
                 <h1 className={`2xl:${isOpen ? 'block' : 'hidden'}`}>Organizer</h1>
                 <Button variant={'outline'} onClick={() => {
                     setIsOpen(!isOpen)
@@ -124,7 +124,7 @@ export default function NewSidebar() {
                     animate={{ opacity: 1 }}
                     transition={{ duration: 1, delay: 0.6 }}
                     className='flex flex-col gap-y-3'>
-                        <Buy isOpen={isOpen} />
+                    <Buy isOpen={isOpen} />
                     <SidebarUser user={{
                         name: session?.user?.name || 'User',
                         email: session?.user?.email || '',
