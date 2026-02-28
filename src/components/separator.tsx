@@ -7,6 +7,6 @@ interface SeparatorProps {
 
 export default function Separator({ orientation = 'horizontal', color = 'bg-neutral-800' }: SeparatorProps) {
   return (
-    <div className={`my-2 ${color} ${orientation === 'vertical' ? 'h-14 w-px' : 'w-full h-px'}`}></div>
+    <div className={`my-4 ${color} ${orientation === 'vertical' ? 'h-14 w-px' : 'w-full h-px'}`}></div>
   )
 }

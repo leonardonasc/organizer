@@ -5,6 +5,7 @@ import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/ui/app-sidebar";
+import { TailwindIndicator } from "@/components/tailwind-indicator";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,6 +40,7 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <SessionProvider>
             <main>
+              <TailwindIndicator />
               {children}
             </main>
           </SessionProvider>

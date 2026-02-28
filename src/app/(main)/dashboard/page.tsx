@@ -23,12 +23,6 @@ export default function DashboardPage() {
             <div className="my-6">
                 <h1 className="text-2xl text-neutral-200">Welcome, {session?.user?.name}!</h1>
             </div>
-
-            <div className="flex gap-x-3">
-                <Card className="flex-1 bg-neutral-900 h-60"></Card>
-                <Card className="flex-1 bg-neutral-900"></Card>
-                <Card className="flex-1 bg-neutral-900"></Card>
-            </div>
         </div>
     )
 }

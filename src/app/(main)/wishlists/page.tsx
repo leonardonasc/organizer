@@ -43,7 +43,7 @@ export default function FavoritesPage() {
           </Card>
 
         ))}
-        <Card className="w-60 h-40 bg-neutral-800 flex items-center justify-center"
+        <Card className="w-60 h-40 bg-neutral-800 cursor-pointer flex items-center justify-center"
           onClick={() => { console.log("Create new wishlist") }}
         >
           <span className="text-neutral-200">Create new wishlist</span>

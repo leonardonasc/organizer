@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button } from './ui/button'
 import { redirect } from 'next/navigation'
+import { motion } from 'framer-motion'
 
 interface SidebarItemProps {
     title: string
@@ -12,15 +13,17 @@ interface SidebarItemProps {
 
 export default function SidebarItem({ title, icon: Icon, url, isOpen, path }: SidebarItemProps) {
     return (
-        <Button variant={path === url ? 'outline' : 'ghost'} className={`w-full text-md flex items-center ${isOpen ? 'justify-start' : 'justify-center'}`}
+        <Button variant={path === url ? 'outline' : 'ghost'} className={` text-md flex items-center w-full ${isOpen ? 'justify-start' : 'justify-center'}`}
             onClick={() => {
                 url && redirect(url)
             }}
         >
-            <div className={`flex w-full items-center ${isOpen ? 'gap-x-3 p-2' : ''} ${path === url ? 'text-neutral-200' : 'text-neutral-400'} cursor-pointer rounded-lg`} >
+            <motion.div
+                whileHover={{ scale: 1.05 }}
+                className={`flex  items-center ${isOpen ? 'gap-x-3 p-2' : ''} ${path === url ? 'text-neutral-200' : 'text-neutral-400'} cursor-pointer rounded-lg`} >
                 {Icon && <Icon size={20} />}
-                {isOpen && <span className="text-sm">{title}</span>}
-            </div>
-        </Button>
+                {isOpen && <span>{title}</span>}
+            </motion.div>
+        </Button >
     )
 }

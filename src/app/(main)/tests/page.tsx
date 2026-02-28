@@ -13,7 +13,6 @@ export default function page() {
         <span>Last updated: 3 hours ago</span>
       </div>
 
-
       <div className='flex gap-x-3 items-center'>
         {/* test1 */}
         <div className='flex flex-col gap-y-1'>
