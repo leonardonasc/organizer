@@ -28,8 +28,8 @@ export default function RootLayout({
             className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col md:flex-row h-dvh w-screen bg-neutral-950 text-neutral-200 overflow-hidden`}
         >
             <NewSidebar />
-            <div className="flex-1 min-h-0 p-2 w-full">
-                <div className="w-full h-full rounded-lg bg-neutral-900 p-4">
+            <div className="flex-1 min-h-0 w-full">
+                <div className="w-full h-full p-6 bg-neutral-900">
                     {children}
                 </div>
             </div>

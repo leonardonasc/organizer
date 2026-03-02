@@ -20,9 +20,9 @@ export default function SidebarItem({ title, icon: Icon, url, isOpen, path }: Si
         >
             <motion.div
                 whileHover={{ scale: 1.05 }}
-                className={`flex  items-center ${isOpen ? 'gap-x-3 p-2' : ''} ${path === url ? 'text-neutral-200' : 'text-neutral-400'} cursor-pointer rounded-lg`} >
+                className={`flex items-center ${isOpen ? 'gap-x-3 p-2' : ''} ${path === url ? 'text-neutral-200' : 'text-neutral-400'} cursor-pointer rounded-lg`} >
                 {Icon && <Icon size={20} />}
-                {isOpen && <span>{title}</span>}
+                {isOpen && <span className='text-sm font-normal'>{title}</span>}
             </motion.div>
         </Button >
     )

@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import SidebarItem from './sidebar-item'
 import { GaugeIcon } from './ui/gauge'
 import SidebarUser from './sidebar-user'
@@ -17,12 +17,34 @@ import { CartIcon } from './ui/cart'
 import { FlaskIcon } from './ui/flask'
 import { usePathname } from 'next/navigation'
 import { Button } from './ui/button'
-import { ChevronLeft, Grip, X } from 'lucide-react'
+import { Banknote, BoltIcon, Grip, House, Menu, TestTubeDiagonal, X } from 'lucide-react'
 import { motion } from 'framer-motion'
 
 export default function NewSidebar() {
 
     const { data: session } = useSession();
+
+    const mainNav = [
+        {
+            title: 'Get Started',
+            icon: House,
+            url: '/getstarted'
+        },
+        {
+            title: 'Settings',
+            icon: BoltIcon
+        },
+        {
+            title: 'Billing',
+            icon: Banknote
+        },
+        {
+            title: 'Tests',
+            icon: TestTubeDiagonal,
+            url: '/tests'
+        }
+
+    ]
 
     const secondaryNav = [
         {
@@ -47,26 +69,6 @@ export default function NewSidebar() {
         },
     ]
 
-    const mainNav = [
-        {
-            title: 'Profile',
-            icon: UserIcon
-        },
-        {
-            title: 'Settings',
-            icon: CogIcon
-        },
-        {
-            title: 'Billing',
-            icon: CartIcon
-        },
-        {
-            title: 'Tests',
-            icon: FlaskIcon,
-            url: '/tests'
-        }
-
-    ]
 
 
     const [isOpen, setIsOpen] = useState(false)
@@ -75,11 +77,8 @@ export default function NewSidebar() {
     return (
         // sidebar
         <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1 }}
-            className={`flex flex-col p-3 w-full 2xl:items-center 2xl:w-25 py-5
-        ${isOpen ? 'fixed top-0 left-0 h-screen inset-0 z-50 items-start bg-neutral-950 2xl:static 2xl:inset-auto 2xl:left-auto 2xl:top-auto 2xl:h-auto 2xl:z-auto 2xl:w-75' : ''}
+            className={`flex flex-col p-3 w-full border-b border-b-neutral-800 2xl:border-r 2xl:border-b-0 2xl:border-r-neutral-800 2xl:items-center 2xl:w-25 py-5
+        ${isOpen ? 'fixed top-0 bg-neutral-950 left-0 h-screen inset-0 z-50 items-start 2xl:static 2xl:inset-auto 2xl:left-auto 2xl:top-auto 2xl:h-auto 2xl:z-auto 2xl:w-75' : 'bg-neutral-900'}
         `}>
             {/* header */}
             <motion.div
@@ -88,10 +87,10 @@ export default function NewSidebar() {
                 transition={{ duration: 1, delay: 0.2 }}
                 className={`flex justify-between ${isOpen ? '2xl:justify-between' : '2xl:justify-center'} items-center w-full`}>
                 <h1 className={`2xl:${isOpen ? 'block' : 'hidden'}`}>Organizer</h1>
-                <Button variant={'outline'} onClick={() => {
+                <Button variant={'ghost'} onClick={() => {
                     setIsOpen(!isOpen)
                 }}>
-                    {isOpen ? <X /> : <Grip />}
+                    {isOpen ? <X /> : <Menu size={20} />}
                 </Button>
             </motion.div>
 

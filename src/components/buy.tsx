@@ -19,9 +19,9 @@ export default function Buy({ isOpen, tier }: BuyProps) {
 
                 <motion.div
                     whileHover={{ scale: 1.01 }}
-                    transition={{ duration: 0.2}}
+                    transition={{ duration: 0.2 }}
                 >
-                    <Button className="w-full bg-neutral-200 hover:bg-purple-200 cursor-pointer" onClick={() => { console.log("Upgrade to premium") }}>Upgrade now</Button>
+                    <Button variant={"outline"} className="w-full cursor-pointer text-neutral-200" onClick={() => { console.log("Upgrade to premium") }}>Upgrade now</Button>
                 </motion.div>
             </Card>
         </div>
