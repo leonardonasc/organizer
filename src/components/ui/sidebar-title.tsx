@@ -5,6 +5,6 @@ interface SidebarTitleProps {
 }
 export default function SidebarTitle({ category }: SidebarTitleProps) {
   return (
-    <div className="text-xs font-bold text-neutral-400">{category.charAt(0).toUpperCase() + category.slice(1)}</div>
+    <div className="text-sm font-normal ml-1 text-neutral-400">{category.toLowerCase()}</div>
   )
 }

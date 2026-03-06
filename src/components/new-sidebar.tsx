@@ -19,6 +19,7 @@ import { usePathname } from 'next/navigation'
 import { Button } from './ui/button'
 import { Banknote, BoltIcon, Grip, House, Menu, TestTubeDiagonal, X } from 'lucide-react'
 import { motion } from 'framer-motion'
+import SidebarTitle from './ui/sidebar-title'
 
 export default function NewSidebar() {
 
@@ -76,32 +77,29 @@ export default function NewSidebar() {
 
     return (
         // sidebar
-        <motion.div
-            className={`flex flex-col p-3 w-full border-b border-b-neutral-800 2xl:border-r 2xl:border-b-0 2xl:border-r-neutral-800 2xl:items-center 2xl:w-25 py-5
+        <div
+            className={`flex flex-col p-3 w-full 2xl:border-r 2xl:border-b-0 2xl:border-r-neutral-800 2xl:items-center 2xl:w-25 py-2
         ${isOpen ? 'fixed top-0 bg-neutral-950 left-0 h-screen inset-0 z-50 items-start 2xl:static 2xl:inset-auto 2xl:left-auto 2xl:top-auto 2xl:h-auto 2xl:z-auto 2xl:w-75' : 'bg-neutral-900'}
         `}>
             {/* header */}
-            <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 1, delay: 0.2 }}
-                className={`flex justify-between ${isOpen ? '2xl:justify-between' : '2xl:justify-center'} items-center w-full`}>
-                <h1 className={`2xl:${isOpen ? 'block' : 'hidden'}`}>Organizer</h1>
+            <div className={`flex justify-between ${isOpen ? '2xl:justify-between' : '2xl:justify-center'} items-center w-full`}>
+                <div className="flex flex-col items-center">
+                    <h1 className={`2xl:${isOpen ? 'block' : 'hidden'}`}>Organizer</h1>
+                </div>
                 <Button variant={'ghost'} onClick={() => {
                     setIsOpen(!isOpen)
                 }}>
                     {isOpen ? <X /> : <Menu size={20} />}
                 </Button>
-            </motion.div>
+            </div>
+            <div className={`w-full ${isOpen ? 'hidden' : 'block 2xl:hidden'}`}>
+                <Separator />
+            </div>
 
             {/* conteúdo */}
 
             <div className={`flex flex-col h-full justify-between ${isOpen ? 'block w-full' : 'hidden'} 2xl:flex`}>
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 1, delay: 0.4 }}
-                    className="border-neutral-800">
+                <div className="border-neutral-800">
                     <Separator />
                     <SidebarItem title={'Dashboard'} icon={GaugeIcon} url={'/dashboard'} isOpen={isOpen} path={path} />
                     <Separator />
@@ -116,13 +114,9 @@ export default function NewSidebar() {
                             <SidebarItem key={item.title} title={item.title} icon={item.icon} url={item.url} isOpen={isOpen} path={path} />
                         ))}
                     </div>
-                </motion.div>
+                </div>
 
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 1, delay: 0.6 }}
-                    className='flex flex-col gap-y-3'>
+                <div className='flex flex-col gap-y-3'>
                     <Buy isOpen={isOpen} />
                     <SidebarUser user={{
                         name: session?.user?.name || 'User',
@@ -131,9 +125,9 @@ export default function NewSidebar() {
                         isOpen: isOpen,
                         tier: 'Pro'
                     }} />
-                </motion.div>
+                </div>
             </div>
 
-        </motion.div>
+        </div>
     )
 }

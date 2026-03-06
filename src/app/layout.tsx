@@ -39,7 +39,7 @@ export default function RootLayout({
       >
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <SessionProvider>
-            <main>
+            <main className="h-full">
               <TailwindIndicator />
               {children}
             </main>

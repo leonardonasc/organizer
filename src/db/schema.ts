@@ -28,6 +28,7 @@ export const users = sqliteTable("user", {
   name: text("name"),
   email: text("email").unique(),
   emailVerified: integer("emailVerified", { mode: "timestamp_ms" }),
+  passwordHash: text("passwordHash"),
   image: text("image"),
   tier: text("tier"),
 });
@@ -100,3 +101,28 @@ export const authenticators = sqliteTable(
     }),
   ],
 );
+
+export const wishlists = sqliteTable("wishlist", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  userId: text("userId")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  title: text("title").notNull(),
+  description: text("description"),
+});
+
+export const wishlistItems = sqliteTable("wishlist_item", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  wishlistId: text("wishlistId")
+    .notNull()
+    .references(() => wishlists.id, { onDelete: "cascade" }),
+  name: text("name").notNull(),
+  description: text("description"),
+  characteristics: text("characteristics", { mode: "json" })
+    .$type<string[]>()
+    .notNull(),
+});

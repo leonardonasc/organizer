@@ -16,15 +16,23 @@ interface SidebarUserProps {
 }
 export default function SidebarUser({ user }: SidebarUserProps) {
     return (
-        <div className='flex w-full items-center justify-between gap-x-2'>
+        <div className='flex w-full justify-between gap-x-2'>
             <div className='gap-x-2 flex-1 border border-neutral-800 rounded-lg p-2'>
                 <div className={`flex items-center ${user.isOpen ? '' : 'justify-center'} gap-x-2`}>
-                    <Image src={user.image || 'https://placehold.co/400'} alt={user.name} width={20} height={20} className='rounded-full' />
+
+                    {user.image ? (
+                        <Image src={user.image} alt={user.name} width={24} height={24} className='rounded-full' />
+                    ) : (
+                        <div className='w-6 h-6 rounded-full bg-neutral-700 flex items-center justify-center text-xs text-white'>
+                            {user.name.split(' ')[0][0]}
+                        </div>
+                    )}
+
                     <h1 className={`text-sm ${user.isOpen ? 'block' : 'hidden'}`}>{user.name.split(' ')[0]}</h1>
                     <Badge variant='outline' className={`ml-auto ${user.isOpen ? 'block' : 'hidden'}`}>{user.tier}</Badge>
                 </div>
             </div>
-            <Button variant='ghost' size='icon' className={`border border-neutral-800 flex text-center ${user.isOpen ? 'flex' : 'hidden'}`} onClick={() => signOut({ callbackUrl: '/login' })}>
+            <Button variant='ghost' className={`border h-full border-neutral-800 flex text-center ${user.isOpen ? 'flex' : 'hidden'}`} onClick={() => signOut({ callbackUrl: '/login' })}>
                 <LogOutIcon />
             </Button>
         </div>

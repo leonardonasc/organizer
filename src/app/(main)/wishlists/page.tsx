@@ -1,52 +1,82 @@
 "use client"
 
-import { Card } from "@/components/ui/card";
+import Loading from "@/components/loading";
+import { Button } from "@/components/ui/button";
 import WishlistItem from "@/components/wishlist-item";
-import { useSession } from "next-auth/react";
+import { useMe } from "@/hooks/use-me";
+import { Wishlists } from "@/types/api";
+import { useEffect, useState } from "react";
 
 export default function FavoritesPage() {
-  const { data: session } = useSession();
 
-  const wishlists = [
-    {
-      id: 1,
-      name: "Electronics",
-    },
-    {
-      id: 2,
-      name: "Books",
-    },
-    {
-      id: 3,
-      name: "Clothing",
-    },
-    {
-      id: 4,
-      name: "Home & Kitchen",
-    },
+  const { me, loading } = useMe();
+  const [wishlists, setWishlists] = useState<Wishlists[]>([]);
 
-    {
-      id: 5,
-      name: "Electronics",
-    },
-  ];
+  useEffect(() => {
+    if (me) {
+      const fetchWishlists = async () => {
+        const res = await fetch(`/api/wishlists`);
+        if (!res.ok) return;
+        const data = await res.json();
+        setWishlists(data.wishlists ?? []);
+      };
+      fetchWishlists();
+    }
+  }, [me]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <Loading />
+      </div>
+    );
+  }
+
+  const handleCreateWishlist = async () => {
+    const title = prompt("Enter wishlist title:");
+    if (!title) return;
+
+    const res = await fetch("/api/wishlists", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ title }),
+    });
+
+    if (!res.ok) {
+      alert("Failed to create wishlist");
+      return;
+    }
+  }
+
+  const handleDeleteWishlist = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this wishlist?")) return;
+    const res = await fetch(`/api/wishlists?id=${id}`, {
+      method: "DELETE",
+    });
+    if (!res.ok) {
+      alert("Failed to delete wishlist");
+      return;
+    }
+    setWishlists(wishlists.filter((w) => w.id !== id));
+  }
+
 
   return (
     <div className="flex flex-col">
       <div className="mb-5">
-        <h1 className="text-2xl text-neutral-200">Manage your wishlists</h1>
+        <h1 className="text-2xl text-neutral-200">{me?.name?.split(' ')[0]}'s Wishlists</h1>
       </div>
 
       <div className="flex flex-wrap gap-3">
         {wishlists.map((wishlist) => (
-          <WishlistItem key={wishlist.id} name={wishlist.name} />
+          <WishlistItem key={wishlist.id} id={wishlist.id} title={wishlist.title} onDelete={handleDeleteWishlist} />
         ))}
-        <Card className="w-60 h-40 bg-neutral-800 cursor-pointer flex items-center justify-center"
-          onClick={() => { console.log("Create new wishlist") }}
-        >
-          <span className="text-neutral-200">Create new wishlist</span>
-        </Card>
+        <Button onClick={() =>
+          handleCreateWishlist()
+        }>
+          Create New Wishlist
+        </Button>
       </div>
-    </div>
+    </div >
   )
 }
