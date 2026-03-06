@@ -79,7 +79,7 @@ export default function NewSidebar() {
         // sidebar
         <div
             className={`flex flex-col p-3 w-full 2xl:border-r 2xl:border-b-0 2xl:border-r-neutral-800 2xl:items-center 2xl:w-25 py-2
-        ${isOpen ? 'fixed top-0 bg-neutral-950 left-0 h-screen inset-0 z-50 items-start 2xl:static 2xl:inset-auto 2xl:left-auto 2xl:top-auto 2xl:h-auto 2xl:z-auto 2xl:w-75' : 'bg-neutral-900'}
+        ${isOpen ? 'fixed top-0 bg-neutral-950 left-0 inset-0 z-50 h-dvh overflow-y-auto items-start 2xl:static 2xl:inset-auto 2xl:left-auto 2xl:top-auto 2xl:h-auto 2xl:z-auto 2xl:w-75' : 'bg-neutral-900'}
         `}>
             {/* header */}
             <div className={`flex justify-between ${isOpen ? '2xl:justify-between' : '2xl:justify-center'} items-center w-full`}>
@@ -117,7 +117,7 @@ export default function NewSidebar() {
                 </div>
 
                 <div className='flex flex-col gap-y-3'>
-                    <Buy isOpen={isOpen} />
+                    {/* <Buy isOpen={isOpen} /> */}
                     <SidebarUser user={{
                         name: session?.user?.name || 'User',
                         email: session?.user?.email || '',

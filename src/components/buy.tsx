@@ -11,7 +11,7 @@ interface BuyProps {
 export default function Buy({ isOpen, tier }: BuyProps) {
 
     return (
-        <div className={`w-full ${isOpen ? 'block' : 'hidden'}`}>
+        <div className={`w-full my-4 ${isOpen ? 'block' : 'hidden'}`}>
             <Card className="border-neutral-800 bg-neutral-950 flex flex-col p-4">
                 <h1 className="text-md text-neutral-200 flex gap-x-2"><ChevronUp className="" /> Boost your experience</h1>
                 <span className="text-sm text-neutral-400">
