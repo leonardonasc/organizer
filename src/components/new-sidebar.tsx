@@ -1,25 +1,19 @@
 "use client"
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import SidebarItem from './sidebar-item'
 import { GaugeIcon } from './ui/gauge'
 import SidebarUser from './sidebar-user'
 import { useSession } from 'next-auth/react'
-import { CogIcon } from './ui/cog'
-import { UserIcon } from './ui/user'
 import Buy from './buy'
 import Separator from './separator'
 import { CircleDollarSignIcon } from './ui/circle-dollar-sign'
 import { HeartIcon } from './ui/heart'
 import { FileTextIcon } from './ui/file-text'
 import { AirplaneIcon } from './ui/airplane'
-import { CartIcon } from './ui/cart'
-import { FlaskIcon } from './ui/flask'
 import { usePathname } from 'next/navigation'
 import { Button } from './ui/button'
 import { Banknote, BoltIcon, Grip, House, Menu, TestTubeDiagonal, X } from 'lucide-react'
-import { motion } from 'framer-motion'
-import SidebarTitle from './ui/sidebar-title'
 
 export default function NewSidebar() {
 
@@ -70,16 +64,27 @@ export default function NewSidebar() {
         },
     ]
 
-
-
     const [isOpen, setIsOpen] = useState(false)
     const path = usePathname()
+
+    useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = "hidden"
+        } else {
+            document.body.style.overflow = ""
+        }
+
+        return () => {
+            document.body.style.overflow = ""
+        }
+    }, [isOpen])
+
 
     return (
         // sidebar
         <div
             className={`flex flex-col p-3 w-full 2xl:border-r 2xl:border-b-0 2xl:border-r-neutral-800 2xl:items-center 2xl:w-25 py-2
-        ${isOpen ? 'fixed top-0 bg-neutral-950 left-0 inset-0 z-50 h-dvh overflow-y-auto items-start 2xl:static 2xl:inset-auto 2xl:left-auto 2xl:top-auto 2xl:h-auto 2xl:z-auto 2xl:w-75' : 'bg-neutral-900'}
+        ${isOpen ? 'fixed top-0 bg-neutral-950 left-0 inset-0 z-50 h-dvh overflow-y-auto overscroll-contain items-start 2xl:static 2xl:inset-auto 2xl:left-auto 2xl:top-auto 2xl:h-auto 2xl:z-auto 2xl:w-75' : 'bg-neutral-900'}
         `}>
             {/* header */}
             <div className={`flex justify-between ${isOpen ? '2xl:justify-between' : '2xl:justify-center'} items-center w-full`}>
@@ -98,7 +103,7 @@ export default function NewSidebar() {
 
             {/* conteúdo */}
 
-            <div className={`flex flex-col h-full justify-between ${isOpen ? 'block w-full' : 'hidden'} 2xl:flex`}>
+            <div className={`flex flex-col h-full justify-between ${isOpen ? 'block w-full p-2' : 'hidden'} 2xl:flex`}>
                 <div className="border-neutral-800">
                     <Separator />
                     <SidebarItem title={'Dashboard'} icon={GaugeIcon} url={'/dashboard'} isOpen={isOpen} path={path} />
@@ -117,7 +122,7 @@ export default function NewSidebar() {
                 </div>
 
                 <div className='flex flex-col gap-y-3'>
-                    {/* <Buy isOpen={isOpen} /> */}
+                    <Buy isOpen={isOpen} />
                     <SidebarUser user={{
                         name: session?.user?.name || 'User',
                         email: session?.user?.email || '',

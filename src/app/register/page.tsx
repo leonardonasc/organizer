@@ -1,34 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import Loading from "@/components/loading";
 import { Button } from "@/components/ui/button";
 import { Field, FieldLabel } from "@/components/ui/field";
-import { GithubIcon } from "@/components/ui/github";
 import { Input } from "@/components/ui/input";
-import { useMe } from "@/hooks/use-me";
-import { signIn } from "next-auth/react";
-import { redirect } from "next/navigation";
 
 export default function RegisterPage() {
-    const { me, loading } = useMe();
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-
-    if (loading) {
-        return (
-            <div className="flex items-center justify-center h-full">
-                <Loading />
-            </div>
-        );
-    }
-
-    if (me) {
-        redirect("/dashboard");
-    }
 
     return (
         <div className="h-full flex items-center justify-center">
