@@ -15,7 +15,7 @@ const protectedRoutes = [
 const authPages = ["/login", "/register"];
 
 export default auth((req) => {
-  const { pathname, search } = req.nextUrl;
+  const { pathname } = req.nextUrl;
   const isLoggedIn = Boolean(req.auth);
 
   const isProtectedRoute = protectedRoutes.some((route) =>
@@ -25,7 +25,6 @@ export default auth((req) => {
 
   if (!isLoggedIn && isProtectedRoute) {
     const loginUrl = new URL("/login", req.url);
-    loginUrl.searchParams.set("callbackUrl", `${pathname}${search}`);
     return NextResponse.redirect(loginUrl);
   }
 
