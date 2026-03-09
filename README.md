@@ -1,5 +1,22 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Environment Variables
+
+This app requires these variables for authentication:
+
+```bash
+AUTH_GITHUB_ID=your_github_oauth_app_client_id
+AUTH_GITHUB_SECRET=your_github_oauth_app_client_secret
+AUTH_SECRET=your_auth_secret
+```
+
+Notes:
+
+- In Vercel, set these in Project Settings -> Environment Variables for the environment you deploy.
+- If `AUTH_GITHUB_ID` is missing, OAuth redirects can generate `client_id=undefined`.
+- The GitHub OAuth App callback URL should match your deployed callback route, for example:
+  `https://your-domain.com/api/auth/callback/github`
+
 ## Getting Started
 
 First, run the development server:

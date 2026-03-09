@@ -122,7 +122,7 @@ export default function NewSidebar() {
                         email: session?.user?.email || '',
                         image: session?.user?.image || '',
                         isOpen: isOpen,
-                        tier: 'Pro'
+                        tier: 'Free'
                     }} />
                 </div>
             </div>
