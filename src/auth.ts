@@ -7,22 +7,12 @@ import Credentials from "next-auth/providers/credentials";
 import { SignInSchema } from "./lib/validations/auth";
 import { compare } from "bcryptjs";
 
-const githubClientId = process.env.AUTH_GITHUB_ID ?? process.env.GITHUB_ID;
-const githubClientSecret =
-  process.env.AUTH_GITHUB_SECRET ?? process.env.GITHUB_SECRET;
-
-if (!githubClientId || !githubClientSecret) {
-  throw new Error(
-    "Missing GitHub OAuth credentials. Set AUTH_GITHUB_ID and AUTH_GITHUB_SECRET in your environment.",
-  );
-}
-
 export const { handlers, auth } = NextAuth({
   adapter: DrizzleAdapter(db),
   providers: [
     Github({
-      clientId: githubClientId,
-      clientSecret: githubClientSecret,
+      clientId: process.env.AUTH_GITHUB_ID!,
+      clientSecret: process.env.AUTH_GITHUB_SECRET!,
     }),
     Credentials({
       credentials: {
