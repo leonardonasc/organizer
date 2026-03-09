@@ -13,18 +13,13 @@ import { FileTextIcon } from './ui/file-text'
 import { AirplaneIcon } from './ui/airplane'
 import { usePathname } from 'next/navigation'
 import { Button } from './ui/button'
-import { Banknote, BoltIcon, Grip, House, Menu, TestTubeDiagonal, X } from 'lucide-react'
+import { Banknote, BoltIcon, Menu, SquareCheck, TestTubeDiagonal, X } from 'lucide-react'
 
 export default function NewSidebar() {
 
     const { data: session } = useSession();
 
     const mainNav = [
-        {
-            title: 'Get Started',
-            icon: House,
-            url: '/getstarted'
-        },
         {
             title: 'Settings',
             icon: BoltIcon
@@ -37,7 +32,7 @@ export default function NewSidebar() {
             title: 'Tests',
             icon: TestTubeDiagonal,
             url: '/tests'
-        }
+        },
 
     ]
 
@@ -62,6 +57,11 @@ export default function NewSidebar() {
             icon: CircleDollarSignIcon,
             url: '/expenses'
         },
+        {
+            title: 'Todo',
+            icon: SquareCheck,
+            url: '/todo'
+        }
     ]
 
     const [isOpen, setIsOpen] = useState(false)
@@ -107,12 +107,6 @@ export default function NewSidebar() {
                 <div className="border-neutral-800">
                     <Separator />
                     <SidebarItem title={'Dashboard'} icon={GaugeIcon} url={'/dashboard'} isOpen={isOpen} path={path} />
-                    <Separator />
-                    <div className="flex flex-col gap-y-1">
-                        {mainNav.map((item) => (
-                            <SidebarItem key={item.title} title={item.title} icon={item.icon} url={item.url} isOpen={isOpen} path={path} />
-                        ))}
-                    </div>
                     <Separator />
                     <div className="flex flex-col gap-y-1">
                         {secondaryNav.map((item) => (
