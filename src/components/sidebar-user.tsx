@@ -29,7 +29,9 @@ export default function SidebarUser({ user }: SidebarUserProps) {
                     )}
 
                     <h1 className={`text-sm ${user.isOpen ? 'block' : 'hidden'}`}>{user.name.split(' ')[0]}</h1>
-                    <Badge variant='outline' className={`ml-auto ${user.isOpen ? 'block' : 'hidden'}`}>{user.tier}</Badge>
+                    <Badge variant='outline' className={`ml-auto ${user.isOpen ? 'block' : 'hidden'} ${user.tier === 'Pro' ? 'bg-purple-900 text-white' : 'bg-gray-500 text-white'}`}>
+                        {user.tier}
+                    </Badge>
                 </div>
             </div>
             <Button variant='ghost' className={`border h-full border-neutral-800 flex text-center ${user.isOpen ? 'flex' : 'hidden'}`} onClick={() => signOut({ callbackUrl: '/login' })}>

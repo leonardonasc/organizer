@@ -18,5 +18,17 @@ export const SignUpSchema = z
     path: ["confirmPassword"],
   });
 
+export const UpdatePasswordSchema = z
+  .object({
+    currentPassword: z.string().min(6),
+    newPassword: z.string().min(6),
+    confirmNewPassword: z.string().min(6),
+  })
+  .refine((data) => data.newPassword === data.confirmNewPassword, {
+    message: "New passwords don't match",
+    path: ["confirmNewPassword"],
+  });
+
 export type SignInData = z.infer<typeof SignInSchema>;
 export type SignUpData = z.infer<typeof SignUpSchema>;
+export type UpdatePasswordData = z.infer<typeof UpdatePasswordSchema>;

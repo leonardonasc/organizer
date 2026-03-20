@@ -13,32 +13,16 @@ import { FileTextIcon } from './ui/file-text'
 import { AirplaneIcon } from './ui/airplane'
 import { usePathname } from 'next/navigation'
 import { Button } from './ui/button'
-import { Banknote, BoltIcon, Menu, SquareCheck, TestTubeDiagonal, X } from 'lucide-react'
+import { Menu, SquareCheck, X } from 'lucide-react'
+import { useMe } from '@/hooks/use-me'
 
 export default function NewSidebar() {
 
-    const { data: session } = useSession();
-
-    const mainNav = [
-        {
-            title: 'Settings',
-            icon: BoltIcon
-        },
-        {
-            title: 'Billing',
-            icon: Banknote
-        },
-        {
-            title: 'Tests',
-            icon: TestTubeDiagonal,
-            url: '/tests'
-        },
-
-    ]
+    const { me, loading } = useMe();
 
     const secondaryNav = [
         {
-            title: 'Wishlist',
+            title: 'Wishlists',
             icon: HeartIcon,
             url: '/wishlists'
         },
@@ -102,7 +86,6 @@ export default function NewSidebar() {
             </div>
 
             {/* conteúdo */}
-
             <div className={`flex flex-col h-full justify-between ${isOpen ? 'block w-full p-2' : 'hidden'} 2xl:flex`}>
                 <div className="border-neutral-800">
                     <Separator />
@@ -118,11 +101,11 @@ export default function NewSidebar() {
                 <div className='flex flex-col gap-y-3'>
                     <Buy isOpen={isOpen} />
                     <SidebarUser user={{
-                        name: session?.user?.name || 'User',
-                        email: session?.user?.email || '',
-                        image: session?.user?.image || '',
+                        name: me?.name || 'User',
+                        image: me?.image || undefined,
+                        email: me?.email || '',
                         isOpen: isOpen,
-                        tier: 'Free'
+                        tier: me?.tier || 'Free'
                     }} />
                 </div>
             </div>

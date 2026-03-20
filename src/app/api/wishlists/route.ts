@@ -23,6 +23,7 @@ export async function POST(request: Request) {
 
   const body = (await request.json()) as WishCreate;
   const name = body.title?.trim();
+  const visibility = body.visibility === "public" ? "public" : "private"; 
 
   if (!name) {
     return NextResponse.json({ error: "Title is required" }, { status: 400 });
@@ -35,6 +36,7 @@ export async function POST(request: Request) {
       title: name,
       description: body.description ?? null,
       userId: user.id,
+      visibility
     })
     .returning();
   return NextResponse.json(wishlist);

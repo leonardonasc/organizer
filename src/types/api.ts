@@ -26,4 +26,13 @@ export type Wishlists = {
 export type WishCreate = {
   title: string;
   description?: string;
+  visibility?: "public" | "private";
+}
+
+export type WishItemCreate = {
+  name: string;
+  description?: string;
+  url: string;
+  image?: string;
+  wishlistId: string;
 }

@@ -6,6 +6,7 @@ import {
 } from "drizzle-orm/sqlite-core";
 import { createClient } from "@libsql/client";
 import { drizzle } from "drizzle-orm/libsql";
+import { create } from "domain";
 
 if (!process.env.TURSO_CONNECTION_URL) {
   throw new Error("Missing TURSO_CONNECTION_URL");
@@ -30,7 +31,7 @@ export const users = sqliteTable("user", {
   emailVerified: integer("emailVerified", { mode: "timestamp_ms" }),
   passwordHash: text("passwordHash"),
   image: text("image"),
-  tier: text("tier"),
+  tier: text("tier").notNull().default("Free"),
 });
 
 export const accounts = sqliteTable(
@@ -111,6 +112,10 @@ export const wishlists = sqliteTable("wishlist", {
     .references(() => users.id, { onDelete: "cascade" }),
   title: text("title").notNull(),
   description: text("description"),
+  visibility: text("visibility").notNull().default("private"),
+  createdAt: integer("createdAt", { mode: "timestamp_ms" })
+    .notNull()
+    .$defaultFn(() => new Date()),
 });
 
 export const wishlistItems = sqliteTable("wishlist_item", {
@@ -122,7 +127,10 @@ export const wishlistItems = sqliteTable("wishlist_item", {
     .references(() => wishlists.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
   description: text("description"),
-  characteristics: text("characteristics", { mode: "json" })
-    .$type<string[]>()
-    .notNull(),
+  url: text("url"),
+  image: text("image"),
+  characteristics: text("characteristics"),
+  createdAt: integer("createdAt", { mode: "timestamp_ms" })
+    .notNull()
+    .$defaultFn(() => new Date()),
 });

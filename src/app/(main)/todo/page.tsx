@@ -29,6 +29,10 @@ export default function TodoPage() {
                 '🟥 criar os annotations',
                 '🟨 definir quais serão as páginas realmente necessárias',
                 '🟪 criar os tiers para definir as limitações',
+                '🟥 implementar sistema de recuperação de senha',
+                '🟥 implementar sistema de atualização de email/senha',
+                '🟥 adicionar resend',
+                '🟪 criação do modal para as wishes'
             ],
         },
         {
@@ -43,7 +47,7 @@ export default function TodoPage() {
     ]
 
     return (
-        <div className='p-4 flex flex-col justify-between h-full'>
+        <div className='p-4 flex justify-between h-full'>
             <div className='flex flex-col gap-4'>
                 <h1 className="text-2xl font-bold mb-4">Todo List ✅</h1>
                 <div className='flex flex-col'>
@@ -65,16 +69,13 @@ export default function TodoPage() {
                     </div>
                 </div>
                 <div>
-                    <aside> Limitações por tier</aside>
+                    <aside>⛔ Limitações por tier</aside>
                     <div className='ml-3 flex flex-col text-sm text-neutral-400'>
                         {texts[2].items.map((item, index) => (
                             <p key={index}>{item}</p>
                         ))}
                     </div>
                 </div>
-                <Button variant="outline" className="w-max mt-4" onClick={() => router.push('/dashboard')}>
-                    Voltar para o Dashboard
-                </Button>
             </div>
             <div className='flex flex-col'>
                 <p> 🟥 - Not started</p>

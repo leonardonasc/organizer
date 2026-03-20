@@ -9,7 +9,6 @@ const protectedRoutes = [
   "/annotations",
   "/expenses",
   "/upgrade",
-  "/getstarted",
 ];
 
 const authPages = ["/login", "/register"];
