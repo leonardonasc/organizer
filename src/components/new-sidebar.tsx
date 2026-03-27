@@ -42,7 +42,7 @@ export default function NewSidebar() {
             url: '/expenses'
         },
         {
-            title: 'Todo',
+            title: 'Todo / Temp Page',
             icon: SquareCheck,
             url: '/todo'
         }
@@ -67,13 +67,18 @@ export default function NewSidebar() {
     return (
         // sidebar
         <div
-            className={`flex flex-col p-3 w-full 2xl:border-r 2xl:border-b-0 2xl:border-r-neutral-800 2xl:items-center 2xl:w-25 py-2
-        ${isOpen ? 'fixed top-0 bg-neutral-950 left-0 inset-0 z-50 h-dvh overflow-y-auto overscroll-contain items-start 2xl:static 2xl:inset-auto 2xl:left-auto 2xl:top-auto 2xl:h-auto 2xl:z-auto 2xl:w-75' : 'bg-neutral-900'}
-        `}>
+            className={`
+                flex flex-col 
+                p-3 
+                w-full md:border-r md:border-b-0 md:border-r-neutral-800 md:items-center md:w-20 py-2
+                ${isOpen ?
+                    'fixed top-0 bg-neutral-950 left-0 inset-0 z-50 h-dvh overflow-y-auto overscroll-contain items-start md:static md:inset-auto md:left-auto md:top-auto md:h-auto md:z-auto md:w-75' : 'bg-neutral-900'}
+            `}>
+
             {/* header */}
-            <div className={`flex justify-between ${isOpen ? '2xl:justify-between' : '2xl:justify-center'} items-center w-full`}>
+            <div className={`flex justify-between ${isOpen ? 'md:justify-between' : 'md:justify-center'} items-center w-full`}>
                 <div className="flex flex-col items-center">
-                    <h1 className={`2xl:${isOpen ? 'block' : 'hidden'}`}>Organizer</h1>
+                    <h1 className={`md:${isOpen ? 'block' : 'hidden'}`}>Organizer</h1>
                 </div>
                 <Button variant={'ghost'} onClick={() => {
                     setIsOpen(!isOpen)
@@ -81,12 +86,12 @@ export default function NewSidebar() {
                     {isOpen ? <X /> : <Menu size={20} />}
                 </Button>
             </div>
-            <div className={`w-full ${isOpen ? 'hidden' : 'block 2xl:hidden'}`}>
+            <div className={`w-full ${isOpen ? 'hidden' : 'block md:hidden'}`}>
                 <Separator />
             </div>
 
             {/* conteúdo */}
-            <div className={`flex flex-col h-full justify-between ${isOpen ? 'block w-full p-2' : 'hidden'} 2xl:flex`}>
+            <div className={`flex flex-col h-full justify-between ${isOpen ? 'block w-full p-2' : 'hidden'} md:flex`}>
                 <div className="border-neutral-800">
                     <Separator />
                     <SidebarItem title={'Dashboard'} icon={GaugeIcon} url={'/dashboard'} isOpen={isOpen} path={path} />
@@ -99,7 +104,7 @@ export default function NewSidebar() {
                 </div>
 
                 <div className='flex flex-col gap-y-3'>
-                    <Buy isOpen={isOpen} />
+                    {/* <Buy isOpen={isOpen} /> */}
                     <SidebarUser user={{
                         name: me?.name || 'User',
                         image: me?.image || undefined,

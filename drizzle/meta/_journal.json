@@ -50,6 +50,13 @@
       "when": 1773977124894,
       "tag": "0006_new_beyonder",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1774318708090,
+      "tag": "0007_equal_tenebrous",
+      "breakpoints": true
     }
   ]
 }

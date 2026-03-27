@@ -1,5 +1,6 @@
 import {
   integer,
+  real,
   sqliteTable,
   text,
   primaryKey,
@@ -126,10 +127,10 @@ export const wishlistItems = sqliteTable("wishlist_item", {
     .notNull()
     .references(() => wishlists.id, { onDelete: "cascade" }),
   name: text("name").notNull(),
-  description: text("description"),
+  description: text("description", { length: 30 }),
+  value: real("value"),
   url: text("url"),
   image: text("image"),
-  characteristics: text("characteristics"),
   createdAt: integer("createdAt", { mode: "timestamp_ms" })
     .notNull()
     .$defaultFn(() => new Date()),

@@ -9,6 +9,7 @@ export type User = {
 export type WishItem = {
   id: string;
   name: string;
+  value: number;
   description?: string;
   url: string;
   image?: string;
@@ -36,3 +37,9 @@ export type WishItemCreate = {
   image?: string;
   wishlistId: string;
 }
+
+export type WishlistApiResponse = Omit<Wishlists, "wishItems"> & {
+  wishItems?: WishItem[];
+  items?: WishItem[];
+};
+

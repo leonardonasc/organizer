@@ -64,6 +64,8 @@ export async function GET() {
       id: wishlists.id,
       title: wishlists.title,
       description: wishlists.description,
+      visibility: wishlists.visibility,
+      createdAt: wishlists.createdAt,
     })
     .from(wishlists)
     .where(eq(wishlists.userId, user.id));

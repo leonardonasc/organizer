@@ -18,7 +18,8 @@ export default function TodoPage() {
                 '🟥 travel page',
                 '🟥 wishlist page',
                 '🟨 arrumar o responsivo (done: xs/2xl)',
-                '🟪 melhorar UI na side/nav bar'
+                '🟪 melhorar UI na side/nav bar',
+                '🟥 talvez adicionar novas fontes'
             ],
         },
         {
@@ -32,7 +33,9 @@ export default function TodoPage() {
                 '🟥 implementar sistema de recuperação de senha',
                 '🟥 implementar sistema de atualização de email/senha',
                 '🟥 adicionar resend',
-                '🟪 criação do modal para as wishes'
+                '🟪 criação do modal para as wishes',
+                '🟥 arrumar desempenho ao abrir wishlist',
+                '🟥 adicionar traduções',
             ],
         },
         {
@@ -40,7 +43,7 @@ export default function TodoPage() {
             items: [
                 '🟥 página para explicar a aplicação',
                 '🟥 mensagem explicando o motivo das limitações, já que é uma demo',
-                '🟥 3 wishlists no free tier',
+                '🟩 3 wishlists no free tier',
             ],
         }
 

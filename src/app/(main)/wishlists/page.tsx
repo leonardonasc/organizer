@@ -3,7 +3,7 @@
 import Loading from "@/components/loading";
 import CreateWishModal from "@/components/modal/create-wish-modal";
 import { Button } from "@/components/ui/button";
-import WishlistItem from "@/components/wishlist-item";
+import Wishlist from "@/components/wishlist";
 import { useMe } from "@/hooks/use-me";
 import { Wishlists } from "@/types/api";
 import { useEffect, useRef, useState } from "react";
@@ -20,7 +20,9 @@ export default function FavoritesPage() {
     if (!res.ok) return;
     const data = await res.json();
     setWishlists(data.wishlists ?? []);
+    console.log(data.wishlists);
   };
+
 
   useEffect(() => {
     if (me && !loadedRef.current) {
@@ -60,11 +62,12 @@ export default function FavoritesPage() {
 
       <div className="flex flex-wrap gap-3">
         {wishlists.map((wishlist) => (
-          <WishlistItem
+          <Wishlist
             key={wishlist.id}
             id={wishlist.id}
             title={wishlist.title}
             onDeleted={fetchWishlists}
+            goToWishlist={wishlist.id}
           />
         ))}
         <CreateWishModal

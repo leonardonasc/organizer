@@ -1,55 +1,57 @@
-import { Trash } from "lucide-react";
+import { Pencil, Trash } from "lucide-react";
 import { Button } from "./ui/button";
-import { useState } from "react";
 
 
-type WishlistItemProps = {
-    id: string;
-    title: string;
-    onDeleted?: () => Promise<void>;
-};
+interface WishlistItemProps {
+    name?: string;
+    value?: number;
+    description?: string;
+    url?: string;
+    image?: string;
+    onDelete?: () => void;
+    onEdit?: () => void;
+}
 
-export default function WishlistItem({ id, title, onDeleted }: WishlistItemProps) {
-    const [isDeleting, setIsDeleting] = useState(false);
 
-    const handleDelete = async () => {
-        if (isDeleting) return;
+export default function WishlistItem({ name, value, url, image, onDelete, onEdit }: WishlistItemProps) {
 
-        setIsDeleting(true);
-        try {
-            const res = await fetch(`/api/wishlists?id=${id}`, {
-                method: "DELETE"
-            });
-
-            if (!res.ok) {
-                alert("Failed to delete wishlist");
-                return;
-            }
-
-            if (onDeleted) {
-                await onDeleted();
-            }
-        } finally {
-            setIsDeleting(false);
-        }
+    const convertToBRL = (amount: number) => {
+        return amount.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
     }
 
     return (
-        <div className="p-4 bg-neutral-800 rounded-lg w-50 h-50 flex justify-between items-start">
-            {title}
-            <Button variant="outline" size="icon" className=""
-                disabled={isDeleting}
-                onClick={
-                    () => {
-                        // TODO: arrumar essa confirmação, talvez um modal
-                        if (confirm('Are you sure you want to delete this wishlist?')) {
-                            handleDelete();
-                        }
-                    }
-                }
-            >
-                <Trash size={16} />
-            </Button>
+        <div className="flex flex-col w-48 rounded-lg bg-white overflow-hidden">
+            <a href={url} target="_blank" rel="noopener noreferrer">
+                <img
+                    src={image || "https://placehold.co/128"}
+                    alt={name}
+                    className="w-48 h-32 object-cover"
+                />
+            </a>
+
+            <div className="flex flex-col  w-full p-2 text-black">
+                <div className="flex items-center justify-between">
+
+                    <h2 className="text-md font-semibold capitalize">{name}</h2>
+                    <div className="flex gap-x-1">
+                        <Button variant="ghost"
+                            className="hover:text-black"
+                            size="icon" onClick={onEdit}>
+                            <Pencil size={16} className="cursor-pointer" />
+                        </Button>
+                        <Button variant="ghost" size="icon"
+                            className="hover:text-black"
+                            onClick={onDelete}
+                        >
+                            <Trash size={16} className="cursor-pointer" />
+                        </Button>
+                    </div>
+                </div>
+                <p className="text-sm font-mono">{value ? convertToBRL(value) : "N/A"}</p>
+            </div>
+
         </div>
     )
 }
+
+
