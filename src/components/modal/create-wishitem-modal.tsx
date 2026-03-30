@@ -12,7 +12,7 @@ interface CreateWishModalProps {
 export default function CreateWishItemModal({ isOpen, onClose, onCreate, wishlistId }: CreateWishModalProps) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [value, setValue] = useState(0);
+  const [valueInput, setValueInput] = useState("");
   const [url, setUrl] = useState("");
   const [image, setImage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -24,10 +24,26 @@ export default function CreateWishItemModal({ isOpen, onClose, onCreate, wishlis
     setIsLoading(true);
 
     try {
+      // aceitar virgulas e pontos como separadores decimais, e remover qualquer outro caractere que não seja número, ponto ou vírgula
+      let normalizedValue = valueInput.trim();
+
+      if (normalizedValue.includes(",")) {
+        normalizedValue = normalizedValue.replace(/\./g, "").replace(",", ".");
+      }
+
+      normalizedValue = normalizedValue.replace(/[^0-9.-]/g, "");
+      const parsedValue = Number(normalizedValue);
+
       const res = await fetch(`/api/wishlists/${wishlistId}/items`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, description, value, url, image }),
+        body: JSON.stringify({
+          name,
+          description,
+          value: Number.isFinite(parsedValue) ? parsedValue : 0,
+          url,
+          image,
+        }),
       });
 
       if (!res.ok) {
@@ -42,7 +58,7 @@ export default function CreateWishItemModal({ isOpen, onClose, onCreate, wishlis
 
       setName("");
       setDescription("");
-      setValue(0);
+      setValueInput("");
       setUrl("");
       setImage("");
 
@@ -72,23 +88,15 @@ export default function CreateWishItemModal({ isOpen, onClose, onCreate, wishlis
               onChange={(e) => setName(e.target.value)}
             />
           </div>
-          {/* <div className="mb-4">
-            <label className="block text-sm mb-1">Description</label>
-            <textarea
-              className="w-full p-2 rounded bg-neutral-800 border border-neutral-700"
-              required
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
-          </div> */}
           <div className="mb-4">
             <label className="block text-sm mb-1">Value</label>
             <input
-              type="number"
+              type="text"
+              inputMode="decimal"
               className="w-full p-2 rounded bg-neutral-800 border border-neutral-700"
-              required
-              value={value}
-              onChange={(e) => setValue(parseFloat(e.target.value) || 0)}
+              value={valueInput}
+              placeholder="Ex: 199,90"
+              onChange={(e) => setValueInput(e.target.value)}
             />
           </div>
           <div className="mb-4">

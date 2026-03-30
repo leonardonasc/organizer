@@ -1,83 +1,207 @@
 import { auth } from "@/auth";
+import { NextResponse } from "next/server";
 import { db, users, wishlists, wishlistItems } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
-import { NextResponse } from "next/server";
+import { WishItemCreate } from "@/types/api";
+import { request } from "https";
 
-type CreateWishlistItemBody = {
-  name?: string;
-  description?: string;
-  value?: number;
-  url?: string;
-  image?: string;
-};
+export async function GET(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  try {
+    const { id: wishlistId } = await params;
+    const session = await auth();
 
-type UpdateWishlistItemBody = {
-  name?: string;
-  description?: string;
-  value?: number | null;
-  url?: string;
-  image?: string;
-};
+    if (!session?.user?.email) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const user = await db
+      .select({ id: users.id })
+      .from(users)
+      .where(eq(users.email, session.user.email))
+      .limit(1)
+      .then((rows) => rows[0]);
+
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    // Verify wishlist belongs to user
+    const wishlist = await db
+      .select({ id: wishlists.id })
+      .from(wishlists)
+      .where(and(eq(wishlists.id, wishlistId), eq(wishlists.userId, user.id)))
+      .limit(1)
+      .then((rows) => rows[0]);
+
+    if (!wishlist) {
+      return NextResponse.json(
+        { error: "Wishlist not found" },
+        { status: 404 },
+      );
+    }
+
+    const items = await db
+      .select()
+      .from(wishlistItems)
+      .where(eq(wishlistItems.wishlistId, wishlistId));
+
+    return NextResponse.json({ items });
+  } catch (error) {
+    console.error("Error fetching wish items:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch items", details: String(error) },
+      { status: 500 },
+    );
+  }
+}
 
 export async function POST(
   request: Request,
   { params }: { params: Promise<{ id: string }> },
 ) {
-  const session = await auth();
+  try {
+    const { id: wishlistId } = await params;
+    const session = await auth();
 
-  if (!session?.user?.email) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (!session?.user?.email) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const user = await db
+      .select({ id: users.id })
+      .from(users)
+      .where(eq(users.email, session.user.email))
+      .limit(1)
+      .then((rows) => rows[0]);
+
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    // Verify wishlist belongs to user
+    const wishlist = await db
+      .select({ id: wishlists.id })
+      .from(wishlists)
+      .where(and(eq(wishlists.id, wishlistId), eq(wishlists.userId, user.id)))
+      .limit(1)
+      .then((rows) => rows[0]);
+
+    if (!wishlist) {
+      return NextResponse.json(
+        { error: "Wishlist not found" },
+        { status: 404 },
+      );
+    }
+
+    const body = (await request.json()) as WishItemCreate;
+
+    if (!body.name?.trim()) {
+      return NextResponse.json({ error: "Name is required" }, { status: 400 });
+    }
+
+    const item = await db
+      .insert(wishlistItems)
+      .values({
+        id: crypto.randomUUID(),
+        wishlistId,
+        name: body.name.trim(),
+        description: body.description?.slice(0, 30) ?? null,
+        value: body.value ?? 0,
+        url: body.url ?? "",
+        image: body.image ?? null,
+        createdAt: new Date(),
+      })
+      .returning()
+      .then((rows) => rows[0]);
+
+    return NextResponse.json(item);
+  } catch (error) {
+    console.error("Error creating wish item:", error);
+    return NextResponse.json(
+      { error: "Failed to create item", details: String(error) },
+      { status: 500 },
+    );
   }
+}
 
-  const [user] = await db
-    .select({ id: users.id })
-    .from(users)
-    .where(eq(users.email, session.user.email))
-    .limit(1);
+export async function PUT(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  try {
+    const { id: wishlistId } = await params;
+    const session = await auth();
 
-  if (!user) {
-    return NextResponse.json({ error: "User not found" }, { status: 404 });
+    if (!session?.user?.email) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const user = await db
+      .select({ id: users.id })
+      .from(users)
+      .where(eq(users.email, session.user.email))
+      .limit(1)
+      .then((rows) => rows[0]);
+
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    }
+
+    const { searchParams } = new URL(request.url);
+    const itemId = searchParams.get("id");
+
+    if (!itemId) {
+      return NextResponse.json(
+        { error: "Item ID is required" },
+        { status: 400 },
+      );
+    }
+
+    // Verify wishlist belongs to user
+    const wishlist = await db
+      .select({ id: wishlists.id })
+      .from(wishlists)
+      .where(and(eq(wishlists.id, wishlistId), eq(wishlists.userId, user.id)))
+      .limit(1)
+      .then((rows) => rows[0]);
+
+    if (!wishlist) {
+      return NextResponse.json(
+        { error: "Wishlist not found" },
+        { status: 404 },
+      );
+    }
+
+    const body = (await request.json()) as WishItemCreate;
+
+    const updatedItem = await db
+      .update(wishlistItems)
+      .set({
+        name: body.name.trim(),
+        description: body.description?.slice(0, 30) ?? null,
+        value: body.value ?? 0,
+        url: body.url ?? "",
+        image: body.image ?? null,
+      })
+      .where(eq(wishlistItems.id, itemId))
+      .returning()
+      .then((rows) => rows[0]);
+
+    if (!updatedItem) {
+      return NextResponse.json({ error: "Item not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(updatedItem);
+  } catch (error) {
+    console.error("Error updating wish item:", error);
+    return NextResponse.json(
+      { error: "Failed to update item", details: String(error) },
+      { status: 500 },
+    );
   }
-
-  const { id: wishlistId } = await params;
-
-  const [wishlist] = await db
-    .select({ id: wishlists.id })
-    .from(wishlists)
-    .where(and(eq(wishlists.id, wishlistId), eq(wishlists.userId, user.id)))
-    .limit(1);
-
-  if (!wishlist) {
-    return NextResponse.json({ error: "Wishlist not found" }, { status: 404 });
-  }
-
-  const body = (await request.json()) as CreateWishlistItemBody;
-  const name = body.name?.trim();
-
-  if (!name) {
-    return NextResponse.json({ error: "Name is required" }, { status: 400 });
-  }
-
-  const parsedValue =
-    typeof body.value === "number" && Number.isFinite(body.value)
-      ? body.value
-      : null;
-
-  const [item] = await db
-    .insert(wishlistItems)
-    .values({
-      id: crypto.randomUUID(),
-      wishlistId,
-      name,
-      description: body.description?.trim() || null,
-      value: parsedValue,
-      url: body.url?.trim() || null,
-      image: body.image?.trim() || null,
-      createdAt: new Date(),
-    })
-    .returning();
-
-  return NextResponse.json(item, { status: 201 });
 }
 
 export async function DELETE(
@@ -90,121 +214,45 @@ export async function DELETE(
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const [user] = await db
+  const user = await db
     .select({ id: users.id })
     .from(users)
     .where(eq(users.email, session.user.email))
-    .limit(1);
+    .limit(1)
+    .then((rows) => rows[0]);
 
-  if (!user) {
-    return NextResponse.json({ error: "User not found" }, { status: 404 });
-  }
 
-  const { id: wishlistId } = await params;
-  const { searchParams } = new URL(request.url);
-  const itemId = searchParams.get("id");
-
-  if (!itemId) {
-    return NextResponse.json({ error: "Item ID is required" }, { status: 400 });
-  }
-
-  const [wishlist] = await db
-    .select({ id: wishlists.id })
-    .from(wishlists)
-    .where(and(eq(wishlists.id, wishlistId), eq(wishlists.userId, user.id)))
-    .limit(1);
-
-  if (!wishlist) {
-    return NextResponse.json({ error: "Wishlist not found" }, { status: 404 });
-  }
-
-  const deletedItem = await db
-    .delete(wishlistItems)
-    .where(
-      and(
-        eq(wishlistItems.id, itemId),
-        eq(wishlistItems.wishlistId, wishlistId),
-      ),
-    )
-    .returning();
-
-  if (deletedItem.length === 0) {
-    return NextResponse.json({ error: "Item not found" }, { status: 404 });
-  }
-
-  return NextResponse.json({ message: "Item deleted successfully" });
+if (!user) {
+  return NextResponse.json({ error: "User not found" }, { status: 404 });
 }
 
-export async function PUT(
-  request: Request,
-  { params }: { params: Promise<{ id: string }> },
-) {
-  const session = await auth();
+const { searchParams } = new URL(request.url);
+const itemId = searchParams.get("id");
 
-  if (!session?.user?.email) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+if (!itemId) {
+  return NextResponse.json({ error: "Item ID is required" }, { status: 400 });
+}
 
-  const [user] = await db
-    .select({ id: users.id })
-    .from(users)
-    .where(eq(users.email, session.user.email))
-    .limit(1);
+// Verify wishlist item belongs to user's wishlist
+const item = await db
+  .select({ id: wishlistItems.id })
+  .from(wishlistItems)
+  .innerJoin(wishlists, eq(wishlists.id, wishlistItems.wishlistId))
+  .where(
+    and(
+      eq(wishlistItems.id, itemId),
+      eq(wishlists.userId, user.id),
+    ),
+  )
+  .limit(1)
+  .then((rows) => rows[0]);
 
-  if (!user) {
-    return NextResponse.json({ error: "User not found" }, { status: 404 });
-  }
+if (!item) {
+  return NextResponse.json({ error: "Item not found" }, { status: 404 });
+}
 
-  const { id: wishlistId } = await params;
-  const { searchParams } = new URL(request.url);
-  const itemId = searchParams.get("id");
+await db.delete(wishlistItems).where(eq(wishlistItems.id, itemId));
 
-  if (!itemId) {
-    return NextResponse.json({ error: "Item ID is required" }, { status: 400 });
-  }
+return NextResponse.json({ message: "Item deleted successfully" });
 
-  const [wishlist] = await db
-    .select({ id: wishlists.id })
-    .from(wishlists)
-    .where(and(eq(wishlists.id, wishlistId), eq(wishlists.userId, user.id)))
-    .limit(1);
-
-  if (!wishlist) {
-    return NextResponse.json({ error: "Wishlist not found" }, { status: 404 });
-  }
-
-  const body = (await request.json()) as UpdateWishlistItemBody;
-  const name = body.name?.trim();
-
-  if (!name) {
-    return NextResponse.json({ error: "Name is required" }, { status: 400 });
-  }
-
-  const parsedValue =
-    typeof body.value === "number" && Number.isFinite(body.value)
-      ? body.value
-      : null;
-
-  const updatedItem = await db
-    .update(wishlistItems)
-    .set({
-      name,
-      description: body.description?.trim() || null,
-      value: parsedValue,
-      url: body.url?.trim() || null,
-      image: body.image?.trim() || null,
-    })
-    .where(
-      and(
-        eq(wishlistItems.id, itemId),
-        eq(wishlistItems.wishlistId, wishlistId),
-      ),
-    )
-    .returning();
-
-  if (updatedItem.length === 0) {
-    return NextResponse.json({ error: "Item not found" }, { status: 404 });
-  }
-
-  return NextResponse.json(updatedItem[0], { status: 200 });
 }

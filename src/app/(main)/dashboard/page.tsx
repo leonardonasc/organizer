@@ -20,7 +20,7 @@ export default function DashboardPage() {
         <div className="flex flex-col">
             <div className="flex justify-between text-xs text-neutral-500 font-semibold">
                 <span className="flex items-center gap-x-2"><GaugeIcon size={15} /> Dashboard</span>
-                <span>Last updated: 3 hours ago</span>
+                {/* <span>Last updated: 3 hours ago</span> */}
             </div>
 
             <div className="my-6">

@@ -14,6 +14,7 @@ export type WishItem = {
   url: string;
   image?: string;
   wishlistId: string;
+  createdAt: string;
 };
 
 export type Wishlists = {
@@ -22,6 +23,7 @@ export type Wishlists = {
   description?: string;
   userId: string;
   wishItems: WishItem[];
+  createdAt: string;
 };
 
 export type WishCreate = {
@@ -33,6 +35,7 @@ export type WishCreate = {
 export type WishItemCreate = {
   name: string;
   description?: string;
+  value: number;
   url: string;
   image?: string;
   wishlistId: string;

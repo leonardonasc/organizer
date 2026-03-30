@@ -66,15 +66,7 @@ export default function CreateWishModal({ isOpen, onClose, onCreate }: CreateWis
               onChange={(e) => setTitle(e.target.value)}
             />
           </div>
-          <div className="mb-4">
-            <label className="block text-sm mb-1">Description</label>
-            <textarea
-              className="w-full p-2 rounded bg-neutral-800 border border-neutral-700"
-              required
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
-          </div>
+        
           <div className="flex justify-end gap-2">
             <button
               type="button"

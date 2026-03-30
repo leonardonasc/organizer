@@ -19,7 +19,9 @@ export default function TodoPage() {
                 '🟥 wishlist page',
                 '🟨 arrumar o responsivo (done: xs/2xl)',
                 '🟪 melhorar UI na side/nav bar',
-                '🟥 talvez adicionar novas fontes'
+                '🟥 talvez adicionar novas fontes',
+                '🟥 adicionar toaster para confirmações'
+
             ],
         },
         {
@@ -50,9 +52,17 @@ export default function TodoPage() {
     ]
 
     return (
-        <div className='p-4 flex justify-between h-full'>
+        <div className='p-4 flex h-full'>
             <div className='flex flex-col gap-4'>
                 <h1 className="text-2xl font-bold mb-4">Todo List ✅</h1>
+
+                <div className='flex flex-col'>
+                    <p> 🟥 - Not started</p>
+                    <p> 🟨 - In progress</p>
+                    <p> 🟪 - Planning</p>
+                    <p> 🟩 - Completed</p>
+                </div>
+
                 <div className='flex flex-col'>
                     <aside> 🎨 Design</aside>
                     <div className='flex items-center'>
@@ -79,12 +89,6 @@ export default function TodoPage() {
                         ))}
                     </div>
                 </div>
-            </div>
-            <div className='flex flex-col'>
-                <p> 🟥 - Not started</p>
-                <p> 🟨 - In progress</p>
-                <p> 🟪 - Planning</p>
-                <p> 🟩 - Completed</p>
             </div>
         </div>
     )

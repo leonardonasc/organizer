@@ -1,9 +1,11 @@
-import Image from 'next/image'
-import React from 'react'
+'use client'
+
 import { Button } from './ui/button'
-import { signOut } from 'next-auth/react'
 import { Badge } from './ui/badge'
-import { LogOutIcon } from 'lucide-react'
+import { Ellipsis } from 'lucide-react'
+import { useState } from 'react'
+import PlusMenu from './plusMenu'
+import Separator from './separator'
 
 interface SidebarUserProps {
     user: {
@@ -15,28 +17,36 @@ interface SidebarUserProps {
     }
 }
 export default function SidebarUser({ user }: SidebarUserProps) {
+
+    const [plusOpen, setPlusOpen] = useState(false)
+
     return (
-        <div className='flex w-full justify-between gap-x-2'>
-            <div className='gap-x-2 flex-1 border border-neutral-800 rounded-lg p-2'>
-                <div className={`flex items-center ${user.isOpen ? '' : 'justify-center'} gap-x-2`}>
-
-                    {user.image ? (
-                        <Image src={user.image} alt={user.name} width={24} height={24} className='rounded-full' />
-                    ) : (
-                        <div className='w-6 h-6 rounded-full bg-neutral-700 flex items-center justify-center text-xs text-white'>
-                            {user.name.split(' ')[0][0]}
+        <div className='relative'>
+            {user.isOpen ?
+                (
+                    <div className='flex items-center gap-2 hover:bg-foreground/10 p-1 rounded-md transition-colors'>
+                        <img src={user.image} alt={user.name} className='size-9 rounded-md' />
+                        <div className='flex flex-col'>
+                            <p className='text-foreground text-sm'>{user.name.split(' ')[0]}</p>
+                            <Badge variant='outline' className='text-xs'>{user.tier}</Badge>
                         </div>
-                    )}
 
-                    <h1 className={`text-sm ${user.isOpen ? 'block' : 'hidden'}`}>{user.name.split(' ')[0]}</h1>
-                    <Badge variant='outline' className={`ml-auto ${user.isOpen ? 'block' : 'hidden'} ${user.tier === 'Pro' ? 'bg-purple-900 text-white' : 'bg-gray-500 text-white'}`}>
-                        {user.tier}
-                    </Badge>
-                </div>
-            </div>
-            <Button variant='ghost' className={`border h-full border-neutral-800 flex text-center ${user.isOpen ? 'flex' : 'hidden'}`} onClick={() => signOut({ callbackUrl: '/login' })}>
-                <LogOutIcon />
-            </Button>
+                        {plusOpen && (
+                            <div className="absolute bottom-full left-0 right-0 mb-2 z-50">
+                                <PlusMenu />
+                            </div>
+                        )}
+
+                        <Button variant='ghost' size='icon' className='ml-auto' onClick={() => {
+                            setPlusOpen(!plusOpen)
+                        }}>
+                            <Ellipsis />
+                        </Button>
+                    </div>
+                ) : (
+                    <p className='text-foreground text-sm'>{user.name.charAt(0)}</p>
+                )
+            }
         </div>
     )
 }
